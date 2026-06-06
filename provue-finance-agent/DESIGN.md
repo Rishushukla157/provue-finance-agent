@@ -682,22 +682,85 @@ If required in production, I would introduce:
 
 # Deployment
 
-The service exposes:
+The service is deployed on Render and publicly accessible.
+
+Public URL:
+
+```text
+https://provue-finance-agent-cwcm.onrender.com
+```
+
+Exposed endpoints:
 
 ```http
 GET /health
 POST /ask
 ```
 
-Recommended deployment:
+Deployment architecture:
 
-* Railway
-* Render
-* Fly.io
+```mermaid
+flowchart LR
+    A[User] --> B[Render Web Service]
+    B --> C[Express API]
+    C --> D[Tara Agent]
+    D --> E[Finance Tools]
+    E --> F[(Render PostgreSQL)]
 
-Deployment tradeoff:
+    F --> E
+    E --> D
+    D --> C
+    C --> A
+```
 
-The project currently uses Ollama Cloud during development. A production deployment would require a reachable OpenAI-compatible endpoint from the hosting environment.
+Hosting components:
+
+| Component | Provider |
+|------------|----------|
+| API Server | Render Web Service |
+| Database | Render PostgreSQL |
+| Source Control | GitHub |
+| Runtime | Node.js 22 |
+| Agent Framework | Mastra SDK |
+
+Deployment process:
+
+1. Push code to GitHub.
+2. Render automatically pulls the latest commit.
+3. Build step installs dependencies.
+4. Express API starts using `npm start`.
+5. Application connects to Render PostgreSQL through `DATABASE_URL`.
+6. Incoming requests are routed through Tara and PostgreSQL-backed tools.
+
+Environment variables used:
+
+```env
+DATABASE_URL=<Render PostgreSQL URL>
+OLLAMA_BASE_URL=http://localhost:11434/v1
+OLLAMA_MODEL=gpt-oss:20b-cloud
+```
+
+Deployment tradeoffs:
+
+- Render free tier introduces cold-start latency after periods of inactivity.
+- Render PostgreSQL free tier has storage and connection limitations.
+- Ollama Cloud is used during development. Production environments typically require a reachable OpenAI-compatible endpoint or hosted model provider.
+- The deployed service uses PostgreSQL-backed fallback logic to ensure responses remain grounded even when model tool-calling is unavailable.
+
+Known limitations:
+
+- No horizontal scaling is currently configured.
+- No authentication layer is implemented.
+- No rate limiting is currently enforced.
+- The system assumes trusted users and a single-tenant environment.
+
+Production readiness improvements:
+
+- Add Redis caching for frequent portfolio queries.
+- Add API authentication and rate limiting.
+- Add monitoring with OpenTelemetry.
+- Add automated database backups.
+- Deploy a dedicated hosted LLM endpoint instead of relying on local Ollama development workflows.
 
 ---
 

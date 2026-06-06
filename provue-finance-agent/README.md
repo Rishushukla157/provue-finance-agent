@@ -521,24 +521,44 @@ Request and response logs provide observability for debugging and traceability.
 
 ## Deployment
 
-Deployment URL:
+Public base URL:
 
 ```text
-TO_BE_ADDED_AFTER_DEPLOYMENT
+https://provue-finance-agent-cwcm.onrender.com
 ```
 
-Recommended deployment options:
+Hosted on:
 
-* Railway
-* Render
-* Fly.io
+- Render Web Service
+- Render PostgreSQL
 
-The deployed service must expose:
+Deployed endpoints:
 
 ```text
 GET /health
 POST /ask
 ```
+
+Health check:
+
+```bash
+curl https://provue-finance-agent-cwcm.onrender.com/health
+```
+
+Ask endpoint:
+
+```bash
+curl -X POST https://provue-finance-agent-cwcm.onrender.com/ask \
+-H "Content-Type: application/json" \
+-d '{"question":"What is my portfolio worth today?"}'
+```
+
+Known deployment limitations:
+
+- Render free tier may have cold-start latency.
+- Render PostgreSQL free tier has storage and connection limits.
+- The deployed API uses the PostgreSQL-backed service fallback when hosted LLM tool-calling is unavailable, so answers remain grounded in database queries.
+
 
 ---
 
