@@ -483,7 +483,7 @@ Answer: Your portfolio’s total value today is ₹119,983.80.
 
 ### Evaluation Suite (5/5 Passed)
 
-![Evaluation Results](./screenshots/eval-pass.png)
+![Evaluation Results](./provue-finance-agent/screenshots/eval-pass.png)
 
 The evaluation suite validates:
 
@@ -497,7 +497,8 @@ The evaluation suite validates:
 
 ### Successful Query
 
-![Successful Query](./screenshots/successful-query.png)
+![Successful Query](./provue-finance-agent/screenshots/successful-query.png)
+
 
 Example portfolio valuation request through `POST /ask`.
 
@@ -505,7 +506,7 @@ Example portfolio valuation request through `POST /ask`.
 
 ### No-Data Handling
 
-![No Data Handling](./screenshots/no-data-query.png)
+![No Data Handling](./provue-finance-agent/screenshots/no-data-query.png)
 
 The system gracefully handles requests outside the available dataset and avoids hallucinating financial information.
 
@@ -513,8 +514,7 @@ The system gracefully handles requests outside the available dataset and avoids 
 
 ### API Logs
 
-![Server Logs](./screenshots/server-logs.png)
-
+![Server Logs](./provue-finance-agent/screenshots/server-logs.png)
 Request and response logs provide observability for debugging and traceability.
 
 ----
